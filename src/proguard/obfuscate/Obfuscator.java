@@ -212,6 +212,9 @@ public class Obfuscator
         // Maintain a map of names to avoid [descriptor - new name - old name].
         Map descriptorMap = new HashMap();
 
+        // Maintain a map of names to avoid [ class name - new name - old name]
+        Map classMMap = new HashMap();
+
         // Do the class member names have to be globally unique?
         if (configuration.useUniqueClassMemberNames)
         {
@@ -226,7 +229,9 @@ public class Obfuscator
                 new AllMemberVisitor(
                 new MemberObfuscator(configuration.overloadAggressively,
                                      nameFactory,
-                                     descriptorMap)));
+                                     descriptorMap,
+                                     configuration.useUniqueNames,
+                                     classMMap)));
         }
         else
         {
@@ -254,7 +259,9 @@ public class Obfuscator
                     new MemberAccessFilter(0, ClassConstants.ACC_PRIVATE,
                     new MemberObfuscator(configuration.overloadAggressively,
                                          nameFactory,
-                                         descriptorMap))),
+                                         descriptorMap,
+                                         configuration.useUniqueNames,
+                                         classMMap))),
 
                     // Clear the collected names.
                     new MapCleaner(descriptorMap)
@@ -294,7 +301,9 @@ public class Obfuscator
                     new MemberAccessFilter(ClassConstants.ACC_PRIVATE, 0,
                     new MemberObfuscator(configuration.overloadAggressively,
                                          nameFactory,
-                                         descriptorMap))),
+                                         descriptorMap,
+                                         configuration.useUniqueNames,
+                                         classMMap))),
 
                     // Clear the collected names.
                     new MapCleaner(descriptorMap)
@@ -309,6 +318,8 @@ public class Obfuscator
         // Collect a map of special names to avoid
         // [descriptor - new name - old name].
         Map specialDescriptorMap = new HashMap();
+
+        Map specialClassMap = new HashMap();
 
         programClassPool.classesAccept(
             new AllMemberVisitor(
@@ -352,7 +363,9 @@ public class Obfuscator
                                             warningPrinter,
                 new MemberObfuscator(configuration.overloadAggressively,
                                      specialNameFactory,
-                                     specialDescriptorMap))))),
+                                     specialDescriptorMap,
+                                     configuration.useUniqueNames,
+                                     specialClassMap))))),
 
                 // Clear the collected names.
                 new MapCleaner(descriptorMap)
@@ -384,7 +397,9 @@ public class Obfuscator
                                             warningPrinter,
                 new MemberObfuscator(configuration.overloadAggressively,
                                      specialNameFactory,
-                                     specialDescriptorMap)))),
+                                     specialDescriptorMap,
+                                     configuration.useUniqueNames,
+                                     specialClassMap)))),
 
                 // Clear the collected names.
                 new MapCleaner(descriptorMap)

@@ -328,4 +328,6 @@ public class Configuration
      * or less readable form. An empty file name means the standard output.
      */
     public File      dump;
+
+    public List useUniqueNames = null;
 }

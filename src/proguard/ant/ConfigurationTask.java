@@ -84,6 +84,8 @@ public class ConfigurationTask extends Task
 
         configuration.warn                      = extendList(configuration.warn,
                                                              this.configuration.warn);
+        configuration.useUniqueNames            = extendList(configuration.useUniqueNames,
+                                                             this.configuration.useUniqueNames);
     }
 
 
@@ -276,6 +278,11 @@ public class ConfigurationTask extends Task
     public void addConfiguredDontwarn(FilterElement filterElement)
     {
         configuration.warn = extendFilter(configuration.warn, filterElement, true);
+    }
+
+    public void addConfigureUseUniqueNames(FilterElement filterElement)
+    {
+        configuration.useUniqueNames = extendFilter(configuration.useUniqueNames, filterElement, true);
     }
 
 

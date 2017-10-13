@@ -96,6 +96,9 @@ class ConfigurationConstants
     public static final String KEEP_DIRECTORIES_OPTION                           = "-keepdirectories";
     public static final String FORCE_PROCESSING_OPTION                           = "-forceprocessing";
 
+
+    public static final String USE_UNIQUE_NAMES_OPTION                           = "-useuniquenames";
+
     public static final String ANY_FILE_KEYWORD            = "**";
 
     public static final String ANY_ATTRIBUTE_KEYWORD       = "*";

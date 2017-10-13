@@ -145,6 +145,7 @@ public class ConfigurationWriter
         writeOption(ConfigurationConstants.VERBOSE_OPTION,             configuration.verbose);
         writeOption(ConfigurationConstants.DONT_NOTE_OPTION,           configuration.note, true);
         writeOption(ConfigurationConstants.DONT_WARN_OPTION,           configuration.warn, true);
+        writeOption(ConfigurationConstants.USE_UNIQUE_NAMES_OPTION,    configuration.useUniqueNames, true);
         writeOption(ConfigurationConstants.IGNORE_WARNINGS_OPTION,     configuration.ignoreWarnings);
         writeOption(ConfigurationConstants.PRINT_CONFIGURATION_OPTION, configuration.printConfiguration);
         writeOption(ConfigurationConstants.DUMP_OPTION,                configuration.dump);

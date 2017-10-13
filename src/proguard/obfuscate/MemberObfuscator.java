@@ -23,6 +23,9 @@ package proguard.obfuscate;
 import proguard.classfile.*;
 import proguard.classfile.util.*;
 import proguard.classfile.visitor.MemberVisitor;
+import proguard.util.ClassNameParser;
+import proguard.util.ListParser;
+import proguard.util.StringMatcher;
 
 import java.util.*;
 
@@ -45,6 +48,9 @@ implements   MemberVisitor
     private final NameFactory    nameFactory;
     private final Map            descriptorMap;
 
+    private final StringMatcher useUniqueNamesclassFilter;
+    private final Map classMap;
+
 
     /**
      * Creates a new MemberObfuscator.
@@ -57,11 +63,16 @@ implements   MemberVisitor
      */
     public MemberObfuscator(boolean        allowAggressiveOverloading,
                             NameFactory    nameFactory,
-                            Map            descriptorMap)
+                            Map            descriptorMap,
+                            List useUniqueNamesClass,
+                            Map classMap)
     {
         this.allowAggressiveOverloading = allowAggressiveOverloading;
         this.nameFactory                = nameFactory;
         this.descriptorMap              = descriptorMap;
+        this.useUniqueNamesclassFilter =  useUniqueNamesClass == null ? null :
+                            new ListParser(new ClassNameParser()).parse(useUniqueNamesClass);
+        this.classMap = classMap;
     }
 
 
@@ -77,19 +88,30 @@ implements   MemberVisitor
             return;
         }
 
-        // Get the member's descriptor.
-        String descriptor = member.getDescriptor(clazz);
 
-        // Check whether we're allowed to overload aggressively.
-        if (!allowAggressiveOverloading)
-        {
-            // Trim the return argument from the descriptor if not.
-            // Works for fields and methods alike.
-            descriptor = descriptor.substring(0, descriptor.indexOf(')')+1);
+        Map nameMap = null;
+
+
+        if(useUniqueNamesclassFilter!=null
+           && useUniqueNamesclassFilter.matches(clazz.getName())) {
+            nameMap = retrieveNameMap(classMap, clazz.getName());
+        }
+        else {
+            // Get the member's descriptor.
+            String descriptor = member.getDescriptor(clazz);
+
+            // Check whether we're allowed to overload aggressively.
+            if (!allowAggressiveOverloading)
+            {
+                // Trim the return argument from the descriptor if not.
+                // Works for fields and methods alike.
+                descriptor = descriptor.substring(0, descriptor.indexOf(')')+1);
+            }
+
+            // Get the name map, creating a new one if necessary.
+            nameMap = retrieveNameMap(descriptorMap, descriptor);
         }
 
-        // Get the name map, creating a new one if necessary.
-        Map nameMap = retrieveNameMap(descriptorMap, descriptor);
 
         // Get the member's new name.
         String newName = newMemberName(member);

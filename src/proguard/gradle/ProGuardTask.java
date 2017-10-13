@@ -964,6 +964,10 @@ public class ProGuardTask extends DefaultTask
         configuration.warn = extendFilter(configuration.warn, filter, true);
     }
 
+    public void useuniquenames(String filter)
+    {
+        configuration.useUniqueNames = extendFilter(configuration.useUniqueNames, filter, true);
+    }
 
     // Hack: support the keyword without parentheses in Groovy.
     public Object getignorewarnings()
